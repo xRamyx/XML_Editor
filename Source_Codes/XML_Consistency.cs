@@ -18,7 +18,7 @@ namespace XML_Editor
             this.first_time = first_time;
         }
 
-
+        //this method writes the output in a file
         public void output(string s, bool new_line)
         {
             //overwrite the file for the first time
@@ -54,6 +54,7 @@ namespace XML_Editor
             }
         }
 
+        //this metod is used to skip characters until '<' is found >>> opening tag
         private void skipChars(StreamReader input)
         {
             char letter = (char)input.Read();
@@ -65,6 +66,7 @@ namespace XML_Editor
             }
         }
 
+        //this method is used to skip spaces and returns the first letter after the spaces
         private char skipSpaces(StreamReader input)
         {
             char letter;
@@ -75,6 +77,7 @@ namespace XML_Editor
             return (char)input.Peek();
         }
 
+        //this method is used to read tag name and tag attributes of the tag
         private List<string> readTag(StreamReader input)
         {
             char letter = (char)input.Read();
@@ -119,6 +122,16 @@ namespace XML_Editor
             return tag_data;
         }
 
-        
+        //this method checks if the tag has data or not (returns a boolean)
+        private bool hasData(StreamReader input)
+        {
+            char first_letter = skipSpaces(input);//read '<'
+
+            if (first_letter != '<')
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
