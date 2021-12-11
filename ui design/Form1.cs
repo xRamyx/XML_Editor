@@ -22,12 +22,12 @@ namespace ui_design
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
+            ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*"; /* chose type of files*/ 
             ofd.ShowDialog();
             textBox1.Text = File.ReadAllText(ofd.FileName);
 
         }
-        private void NotChange(KeyPressEventArgs e)
+        private void NotChange(KeyPressEventArgs e) /* function to prevent writing in text box */ 
         {
             e.Handled = true;
         }
@@ -37,5 +37,12 @@ namespace ui_design
             NotChange(e);
 
         }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            NotChange(e);
+        }
+
+        
     }
 }
