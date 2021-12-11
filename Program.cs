@@ -57,7 +57,7 @@ namespace XML_Formatting
             }
         }
         public void move_parent_up()
-        
+
         {
             current_parent = current_parent.getParent();
         }
@@ -70,16 +70,16 @@ namespace XML_Formatting
         {
             writer = new StreamWriter(location);
             writer.AutoFlush = true;
-        } 
+        }
         public static void printXMLToFile(TreeNode node, int level)
         {
-            for(int i = 0; i < level; i++)
+            for (int i = 0; i < level; i++)
             {
                 writer.Write(" ");
             }
             writer.WriteLine("<" + node.getTagName() + ">");
             string value = node.getTagValue();
-            if(value != "")
+            if (value != "")
             {
                 int TagLevel = level + 4;
                 for (int i = 0; i < TagLevel; i++)
@@ -90,9 +90,9 @@ namespace XML_Formatting
             }
             else { }
 
-            foreach(TreeNode subtree in node.getChildren())
+            foreach (TreeNode subtree in node.getChildren())
             {
-                printXMLToFile(subtree,level+4);
+                printXMLToFile(subtree, level + 4);
             }
             for (int i = 0; i < level; i++)
             {
@@ -108,12 +108,10 @@ namespace XML_Formatting
         {
             string contents;
             Tree XMLTree = new Tree();
-            XmlDocument doc = new XmlDocument();
             using (StreamReader streamReader = new StreamReader(location))
             {
                 contents = streamReader.ReadToEnd();
             }
-            doc.LoadXml(contents);
             int i;
             for (i = 0; i < contents.Length; i++)
             {
@@ -157,10 +155,10 @@ namespace XML_Formatting
     }
 
     class Program
-    { 
+    {
         static void Main(string[] args)
         {
-            Tree XMLTree = XMLReader.XMLtoTree("C:\\Users\\Rany\\Desktop\\sample.xml");
+            Tree XMLTree = XMLReader.XMLtoTree("C:\\Users\\Rany\\Desktop\\sample (1).xml");
             Formatting.SetLocation("C:\\Users\\Rany\\Desktop\\myXmFile.xml");
             Formatting.printXMLToFile(XMLTree.getRoot(), 0);
             Formatting.writer.Close();
