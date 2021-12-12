@@ -117,17 +117,17 @@ namespace XML_Editor
                     break;
                 }
             }
-            tag_data[0] = (tag_name == "") ? null : tag_name;
-            tag_data[1] = letter.ToString(); //Self-closing / or >
+            tag_data[0] = tag_name;
+            tag_data[1] = letter.ToString(); //Self-closing '/' or '>'
             return tag_data;
         }
 
         //this method checks if the tag has data or not (returns a boolean)
         private bool hasData(StreamReader input)
         {
-            char first_letter = skipSpaces(input);//read '<'
+            char first_letter = skipSpaces(input);//read '<' if it has no data or read a letter if it has data
 
-            if (first_letter != '<')
+            if (first_letter != '<' && first_letter != '\r') // \r is the carriage return
             {
                 return true;
             }
