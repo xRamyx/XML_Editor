@@ -139,7 +139,7 @@ namespace XML_Formatting
                         }
                         else
                         {
-                            while (contents[i] != '<' && contents[i] != '\n')
+                            while (contents[i] != '<' && contents[i] != '\r' && contents[i] != '\n')
                             {
                                 tagValue += contents[i];
                                 i++;
@@ -153,4 +153,3 @@ namespace XML_Formatting
             return XMLTree;
         }
     }
-}
