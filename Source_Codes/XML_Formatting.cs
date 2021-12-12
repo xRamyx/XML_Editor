@@ -153,15 +153,4 @@ namespace XML_Formatting
             return XMLTree;
         }
     }
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Tree XMLTree = XMLReader.XMLtoTree("C:\\Users\\Rany\\Desktop\\sample (1).xml");
-            Formatting.SetLocation("C:\\Users\\Rany\\Desktop\\myXmFile.xml");
-            Formatting.printXMLToFile(XMLTree.getRoot(), 0);
-            Formatting.writer.Close();
-        }
-    }
 }
