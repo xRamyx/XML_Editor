@@ -133,5 +133,154 @@ namespace XML_Editor
             }
             return false;
         }
+
+        //this method is used to check the consistency of the xml file and output the corrected file
+        public int checkConsistency(StreamReader input)
+        {
+            Stack<string> tags = new Stack<string>();
+            List<string> tag_data = new List<string>();
+            int errors = 0;
+            char characteres;
+            string tag_name = null;
+            string tag_attributes = null;
+            bool current_has_data = false;//to know if the saved tag name has data or not
+            bool previous_has_data = false;
+            bool previous_closed = false;
+
+            //read from the file char by char(-1 means no data to be read)
+            while (input.Peek() > -1)
+            {
+                //read charachters until you reach '<'
+                skipChars(input);
+
+                //check if it is an opening tag
+                if (Char.IsLetter((char)input.Peek()))
+                {
+                    //get the tagname
+                    tag_data = readTag(input);
+                    tag_name = tag_data[0];
+
+                    //get tag attributes
+                    tag_attributes = tag_data[2];
+
+                    //check that it is NOT a selfclosing tag (dont push on stack)
+                    if (tag_data[1] != "/")
+                    {
+                        //read tag data
+                        current_has_data = hasData(input);
+
+                        //if it is the first opening tag then push it in stack
+                        if (tags.Count == 0)
+                        {
+                            tags.Push(tag_name);
+                            output("<" + tag_name + tag_attributes + ">", false);
+                        }
+
+                        //if we have an open tag and the previous one has the same tag name>>> error
+                        else if (tag_name == tags.Peek())
+                        {
+                            output("</" + tags.Peek() + ">" + " <<< ERROR DETECTED & CORRECTED HERE!", true);
+                            tags.Pop();
+                            tags.Push(tag_name);
+                            output("<" + tag_name + tag_attributes + ">", false);
+                            errors++;
+                        }
+
+                        //if the opened tag has data and is not closed
+                        else if (previous_has_data && !previous_closed)
+                        {
+                            output("</" + tags.Peek() + ">" + " <<< ERROR DETECTED & CORRECTED HERE!", true);
+                            previous_closed = true;
+                            tags.Pop();
+                            tags.Push(tag_name);
+                            output("<" + tag_name + tag_attributes + ">", false);
+                            errors++;
+                        }
+
+                        else
+                        {
+                            //no errors
+                            tags.Push(tag_name);
+                            output("<" + tag_name + tag_attributes + ">", false);
+                        }
+                    }
+                    else if (tag_data[1] == "/")
+                    {
+                        if (previous_has_data && !previous_closed)
+                        {
+                            //check if current tag has data or not
+                            output("</" + tags.Peek() + ">", true);
+                            previous_closed = true;
+                            tags.Pop();
+                            errors++;
+                        }
+
+                        //selfclosing tag
+                        output("<" + tag_name + tag_attributes + "/>", false);
+                        characteres = (char)input.Read();
+                    }
+                    else
+                    {
+                        output("<" + tag_data[1], false);
+                    }
+
+                    //if it is a selfcosing tag then it does not have data and it closes itself
+                    previous_has_data = (tag_data[1] == "/") ? false : current_has_data;
+                    previous_closed = (tag_data[1] == "/") ? true : false;
+                }
+
+                //if it is a closing tag
+                else if (input.Peek() == (int)'/')
+                {
+                    characteres = (char)input.Read();
+
+                    //get the tag name of the closing tag
+                    tag_name = readTag(input)[0];
+
+                    //compare it with the top of stack
+                    if (tags.Count > 0 && tags.Peek() == tag_name)
+                    {
+                        output("</" + tag_name + ">", false);
+                        tags.Pop();
+                        previous_closed = true;
+                    }
+
+                    //if the tag name does not match the tag name on the top of the stack >>> error
+                    else if (tags.Count > 0)
+                    {
+                        errors ++;
+                        output("</" + tags.Peek() + ">" + " <<< ERROR DETECTED & CORRECTED HERE!", false);
+                        tags.Pop();
+                        previous_closed = true;
+
+                        if (tags.Count > 0 && tag_name == tags.Peek())
+                        {
+                            output("</" + tag_name + ">", false);
+                            tags.Pop();
+                        }
+                    }
+                }
+
+                //if it is a comment or preprocessor tag >>> skip
+                else
+                {
+                    characteres = (char)input.Read();
+                    while (characteres != '>')
+                    {
+                        characteres = (char)input.Read();
+                    }
+                }
+            }
+
+            //if the stack is not empty >>> error
+            while (tags.Count != 0)
+            {
+                errors++;
+                output("</" + tags.Peek() + ">" + " <<< ERROR DETECTED & CORRECTED HERE!", false);
+                tags.Pop();
+            }
+
+            return errors;
+        }
     }
 }
