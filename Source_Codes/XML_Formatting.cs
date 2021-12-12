@@ -57,7 +57,7 @@ namespace XML_Formatting
             }
         }
         public void move_parent_up()
-
+        
         {
             current_parent = current_parent.getParent();
         }
@@ -70,16 +70,16 @@ namespace XML_Formatting
         {
             writer = new StreamWriter(location);
             writer.AutoFlush = true;
-        }
-        public static void printXMLToFile(TreeNode node, int level)
+        } 
+        public static void Prettify(TreeNode node, int level)
         {
-            for (int i = 0; i < level; i++)
+            for(int i = 0; i < level; i++)
             {
                 writer.Write(" ");
             }
             writer.WriteLine("<" + node.getTagName() + ">");
             string value = node.getTagValue();
-            if (value != "")
+            if(value != "")
             {
                 int TagLevel = level + 4;
                 for (int i = 0; i < TagLevel; i++)
@@ -90,15 +90,29 @@ namespace XML_Formatting
             }
             else { }
 
-            foreach (TreeNode subtree in node.getChildren())
+            foreach(TreeNode subtree in node.getChildren())
             {
-                printXMLToFile(subtree, level + 4);
+                Prettify(subtree,level+4);
             }
             for (int i = 0; i < level; i++)
             {
                 writer.Write(" ");
             }
             writer.WriteLine("</" + node.getTagName() + ">");
+        }
+
+        public static void Minify(TreeNode node)
+        {
+            writer.Write("<" + node.getTagName() + ">");
+            string value = node.getTagValue();
+            writer.Write(value);
+
+            foreach (TreeNode subtree in node.getChildren())
+            {
+                Minify(subtree);
+            }
+
+            writer.Write("</" + node.getTagName() + ">");
         }
     }
 
@@ -122,6 +136,8 @@ namespace XML_Formatting
                     {
                         XMLTree.move_parent_up();
                     }
+                    else if(contents[i] == '?') { }
+                    else if(contents[i] == '!') { }
                     else
                     {
                         string openingTag = "";
