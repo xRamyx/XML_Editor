@@ -88,19 +88,19 @@ namespace ui_design
         private void FormatBtn_Click(object sender, EventArgs e)
         {
             Tree XMLTree = XMLReader.XMLtoTree(file);
-            Formatting.SetLocation(@"C:\Users\moamn\OneDrive\Desktop\New folder (3)\test.txt");
+            Formatting.SetLocation(output);
             Formatting.Prettify(XMLTree.getRoot(), 0);
             Formatting.writer.Close();
-            richTextBox1.Text = File.ReadAllText(@"C:\Users\moamn\OneDrive\Desktop\New folder (3)\test.txt");
+            richTextBox1.Text = File.ReadAllText(output);
             MessageBox.Show("The XML file has been formatted","INFO!");
         }
         private void MinifyBtn_Click(object sender, EventArgs e)
         {
             Tree XMLTree = XMLReader.XMLtoTree(file);
-            Formatting.SetLocation(@"C:\Users\moamn\OneDrive\Desktop\New folder (3)\test.txt");                     
+            Formatting.SetLocation(output);                     
             Formatting.Minify(XMLTree.getRoot());
             Formatting.writer.Close();
-            richTextBox1.Text = File.ReadAllText(@"C:\Users\moamn\OneDrive\Desktop\New folder (3)\test.txt");
+            richTextBox1.Text = File.ReadAllText(output);
             MessageBox.Show("The XML file has been minified", "INFO!");
         }       
     }
