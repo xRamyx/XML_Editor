@@ -22,6 +22,7 @@ namespace XML_Formatting
         public TreeNode getParent() { return parent; }
         public List<TreeNode> getChildren() { return children; }
         public void setParent(TreeNode parent) { this.parent = parent; }
+        // Function to add a child to this node
         public TreeNode addChild(string TagName, string TagValue)
         {
             TreeNode temp = new TreeNode(TagName, TagValue);
@@ -42,22 +43,29 @@ namespace XML_Formatting
         {
             return root;
         }
+
+        // Function to insert a node into the tree
         public void insert(string TagName, string TagValue)
         {
+            // First time entering the tree to add a node
             if (root == null)
             {
+                // Add this node and set it as the Root and the Current Parent
                 root = new TreeNode(TagName, TagValue);
                 current_parent = root;
             }
+            // Normal case for adding a node
             else
             {
+                // Add the node under the Current Parent and set the Current Parent to this new node
                 TreeNode temp = current_parent.addChild(TagName, TagValue);
                 temp.setParent(current_parent);
                 current_parent = temp;
             }
         }
+
+        // Function to move up the heriarchy in a tree in case tag is closed
         public void move_parent_up()
-        
         {
             current_parent = current_parent.getParent();
         }
@@ -66,20 +74,26 @@ namespace XML_Formatting
     class Formatting
     {
         public static StreamWriter writer;
+        // Function to set the location of the output file
         public static void SetLocation(string location)
         {
             writer = new StreamWriter(location);
             writer.AutoFlush = true;
-        } 
+        }
+
+        // Function to pretiffy the xml file
         public static void Prettify(TreeNode node, int level)
         {
-            for(int i = 0; i < level; i++)
+            // Print 4 spaces as indentation
+            for (int i = 0; i < level; i++)
             {
                 writer.Write(" ");
             }
+            // Print Tag Name
             writer.WriteLine("<" + node.getTagName() + ">");
             string value = node.getTagValue();
-            if(value != "")
+            // Print Tag value with 4 more indentation spaces
+            if (value != "")
             {
                 int TagLevel = level + 4;
                 for (int i = 0; i < TagLevel; i++)
@@ -89,18 +103,20 @@ namespace XML_Formatting
                 writer.WriteLine(value);
             }
             else { }
-
-            foreach(TreeNode subtree in node.getChildren())
+            // Recursion call to all children of this node
+            foreach (TreeNode subtree in node.getChildren())
             {
-                Prettify(subtree,level+4);
+                Prettify(subtree, level + 4);
             }
             for (int i = 0; i < level; i++)
             {
                 writer.Write(" ");
             }
+            // Print closing tag
             writer.WriteLine("</" + node.getTagName() + ">");
         }
 
+        // Function to print the XML file without spaces or new lines
         public static void Minify(TreeNode node)
         {
             writer.Write("<" + node.getTagName() + ">");
@@ -118,28 +134,37 @@ namespace XML_Formatting
 
     class XMLReader
     {
+        // Function to return an XML file as a tree
         public static Tree XMLtoTree(string location)
         {
+            // read XML file as a string in contents
             string contents;
             Tree XMLTree = new Tree();
             using (StreamReader streamReader = new StreamReader(location))
             {
                 contents = streamReader.ReadToEnd();
             }
+            // Loop on every character in the file
             int i;
             for (i = 0; i < contents.Length; i++)
             {
+                // Search for opening or closing tag
                 if (contents[i] == '<')
                 {
                     i++;
+                    // If closing tag then decrement heriarchy in tree
                     if (contents[i] == '/')
                     {
                         XMLTree.move_parent_up();
                     }
-                    else if(contents[i] == '?') { }
-                    else if(contents[i] == '!') { }
+                    // Ignore XML version line
+                    else if (contents[i] == '?') { }
+                    // Ignore XML comments
+                    else if (contents[i] == '!') { }
+                    // Then this is opening tag
                     else
                     {
+                        // Take the tag name in a string until closing bracket
                         string openingTag = "";
                         while (contents[i] != '>')
                         {
@@ -147,14 +172,18 @@ namespace XML_Formatting
                             i++;
                         }
                         i++;
+                        // Ignore spaces and new lines
                         while (contents[i] == ' ' || contents[i] == '\n' || contents[i] == '\r') i++;
                         string tagValue = "";
+                        // If there is no tag value then skip
                         if (contents[i] == '<')
                         {
                             i--;
                         }
+                        // In case there is tag value
                         else
                         {
+                            // Take the tag value in a string until there is a new line or an opening tag
                             while (contents[i] != '<' && contents[i] != '\r' && contents[i] != '\n')
                             {
                                 tagValue += contents[i];
@@ -162,6 +191,7 @@ namespace XML_Formatting
                             }
                             i--;
                         }
+                        // Insert the node in the tree
                         XMLTree.insert(openingTag, tagValue);
                     }
                 }
