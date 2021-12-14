@@ -55,52 +55,83 @@ namespace ui_design
         }
         private void ConsistencyBtn_Click(object sender, EventArgs e)
         {
+            if (file == null)
+            {
+                MessageBox.Show("Please! Put input file!", "Alert");
+
+            }
+            else if(output == null)
+            {
+                MessageBox.Show("Please! Put output file!", "Alert");
+            }
             string input_path = file;
             string output_path = output;
-            StreamReader streamReader = new StreamReader(input_path);
+            StreamReader streamReader = new StreamReader(input_path);           
             XML_Consistency xml = new XML_Consistency(output_path, 0);
             int errors = xml.checkConsistency(streamReader);           
             richTextBox1.Text = File.ReadAllText(output_path);
-            string word = " <<< ERROR DETECTED & CORRECTED HERE!";
+            string word = " <<< ERROR DETECTED & CORRECTED HERE!";                      
             int index = 0;
-            while (index < richTextBox1.TextLength)
-            {
-                int erorr_found = richTextBox1.Find(word, index, RichTextBoxFinds.None);
-                if (erorr_found != -1)
+                while (index < richTextBox1.TextLength)
                 {
+                int erorr_found = richTextBox1.Find(word, index, RichTextBoxFinds.None);
+                     if (erorr_found != -1)
+                     { 
                     richTextBox1.SelectionStart = erorr_found;
                     richTextBox1.SelectionLength = word.Length;
                     richTextBox1.SelectionBackColor = Color.Yellow;
+                     }
+                     else
+                     {
+                    break;
+                     }
+                index += word.Length;
+                }
+                if (errors > 0)
+                {
+                    MessageBox.Show("Number of erorrs is " + errors + " and they are detected and corected and highlighted", "INFO!");
                 }
                 else
                 {
-                    break;
+                    MessageBox.Show("There are no erorrs in the XML file", "INFO!");
+                
                 }
-                index += word.Length;
-            }
-            if (errors > 0)
-            {
-                MessageBox.Show("Number of erorrs is " + errors +" and they are detected and corected and highlighted", "INFO!");             
-            }
-            else MessageBox.Show("There are no erorrs in the XML file", "INFO!");
         }
 
         private void FormatBtn_Click(object sender, EventArgs e)
         {
+            if (file == null)
+            {
+                MessageBox.Show("Please! Put input file!", "Alert");
+
+            }
+            else if (output == null)
+            {
+                MessageBox.Show("Please! Put output file!", "Alert");
+            }
             Tree XMLTree = XMLReader.XMLtoTree(file);
             Formatting.SetLocation(output);
             Formatting.Prettify(XMLTree.getRoot(), 0);
             Formatting.writer.Close();
-            richTextBox1.Text = File.ReadAllText(output);
+            richTextBox1.Text = File.ReadAllText(output);         
             MessageBox.Show("The XML file has been formatted","INFO!");
         }
         private void MinifyBtn_Click(object sender, EventArgs e)
         {
+            if (file == null)
+            {
+                MessageBox.Show("Please! Put input file!", "Alert");
+
+            }
+            else if (output == null)
+            {
+                MessageBox.Show("Please! Put output file!", "Alert");
+            }
             Tree XMLTree = XMLReader.XMLtoTree(file);
             Formatting.SetLocation(output);                     
             Formatting.Minify(XMLTree.getRoot());
             Formatting.writer.Close();
-            richTextBox1.Text = File.ReadAllText(output);
+            richTextBox1.Text = File.ReadAllText(output);           
             MessageBox.Show("The XML file has been minified", "INFO!");
         }       
     }
