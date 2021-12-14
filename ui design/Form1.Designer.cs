@@ -38,14 +38,13 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.FormatBtn = new System.Windows.Forms.Button();
             this.DecompressBtn = new System.Windows.Forms.Button();
-            this.Outputbtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // browse
             // 
             this.browse.BackColor = System.Drawing.Color.Pink;
             this.browse.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.browse.Location = new System.Drawing.Point(382, 210);
+            this.browse.Location = new System.Drawing.Point(382, 276);
             this.browse.Name = "browse";
             this.browse.Size = new System.Drawing.Size(132, 37);
             this.browse.TabIndex = 0;
@@ -148,25 +147,12 @@
             this.DecompressBtn.Text = "Decompress";
             this.DecompressBtn.UseVisualStyleBackColor = false;
             // 
-            // Outputbtn
-            // 
-            this.Outputbtn.BackColor = System.Drawing.Color.Pink;
-            this.Outputbtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Outputbtn.Location = new System.Drawing.Point(382, 321);
-            this.Outputbtn.Name = "Outputbtn";
-            this.Outputbtn.Size = new System.Drawing.Size(132, 63);
-            this.Outputbtn.TabIndex = 14;
-            this.Outputbtn.Text = "Put output file";
-            this.Outputbtn.UseVisualStyleBackColor = false;
-            this.Outputbtn.Click += new System.EventHandler(this.Outputbtn_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ui_design.Properties.Resources.photo_1542903660_eedba2cda473;
             this.ClientSize = new System.Drawing.Size(1052, 622);
-            this.Controls.Add(this.Outputbtn);
             this.Controls.Add(this.DecompressBtn);
             this.Controls.Add(this.FormatBtn);
             this.Controls.Add(this.richTextBox1);
@@ -197,7 +183,6 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button FormatBtn;
         private System.Windows.Forms.Button DecompressBtn;
-        private System.Windows.Forms.Button Outputbtn;
     }
 }
 

@@ -13,7 +13,7 @@ namespace ui_design
 {
     public partial class Form1 : Form
     {
-        string file, output;
+        string file,inputPath,input_file_name;
 
         public Form1()
         {
@@ -22,23 +22,22 @@ namespace ui_design
 
         private void browse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*"; /* chose type of files*/
-            ofd.ShowDialog();
-            textBox1.Text = File.ReadAllText(ofd.FileName);
-            file = ofd.FileName;
-        }
-        private void Outputbtn_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*"; /* chose type of files*/
-            ofd.ShowDialog();
-            //textBox1.Text = File.ReadAllText(ofd.FileName);
-            output = ofd.FileName;
-
-        }
+            try
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                ofd.Filter = "XML files (*.xml)|*.xml"; /* chose type of files*/
+                ofd.ShowDialog();
+                textBox1.Text = File.ReadAllText(ofd.FileName);
+                file = ofd.FileName;
+                input_file_name = System.IO.Path.GetFileNameWithoutExtension(file);
+                inputPath = System.IO.Path.GetDirectoryName(file);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message, "Alert");
+            }
+        }       
         private void NotChange(KeyPressEventArgs e) /* function to prevent writing in textbox */
         {
             e.Handled = true;
@@ -58,12 +57,12 @@ namespace ui_design
             try
             {
                 string input_path = file;
-                string output_path = output;
+                string output_path = Path.Combine(inputPath, input_file_name + "_Consistency.xml");
                 StreamReader streamReader = new StreamReader(input_path);
                 XML_Consistency xml = new XML_Consistency(output_path, 0);
                 int errors = xml.checkConsistency(streamReader);
-                richTextBox1.Text = File.ReadAllText(output_path);
                 string word = " <<< ERROR DETECTED & CORRECTED HERE!";
+                richTextBox1.Text = File.ReadAllText(output_path);
                 int index = 0;
                 while (index < richTextBox1.TextLength)
                 {
@@ -96,11 +95,7 @@ namespace ui_design
                 {
                     MessageBox.Show("Please! Put input file!", "Alert");
 
-                }
-                else if (output == null)
-                {
-                    MessageBox.Show("Please! Put output file!", "Alert");
-                }
+                }              
                 else MessageBox.Show(x.Message, "Alert");
             }
         }
@@ -110,10 +105,10 @@ namespace ui_design
             try
             {
                 Tree XMLTree = XMLReader.XMLtoTree(file);
-                Formatting.SetLocation(output);
+                Formatting.SetLocation(Path.Combine(inputPath, input_file_name + "_Format.xml"));
                 Formatting.Prettify(XMLTree.getRoot(), 0);
                 Formatting.writer.Close();
-                richTextBox1.Text = File.ReadAllText(output);
+                richTextBox1.Text = File.ReadAllText(Path.Combine(inputPath, input_file_name + "_Format.xml"));
                 MessageBox.Show("The XML file has been formatted", "INFO!");
             }
             catch ( Exception x)
@@ -122,11 +117,7 @@ namespace ui_design
                 {
                     MessageBox.Show("Please! Put input file!", "Alert");
 
-                }
-                else if (output == null)
-                {
-                    MessageBox.Show("Please! Put output file!", "Alert");
-                }
+                }             
                 else MessageBox.Show(x.Message, "Alert");
             }
         }
@@ -135,10 +126,10 @@ namespace ui_design
             try
             {
                 Tree XMLTree = XMLReader.XMLtoTree(file);
-                Formatting.SetLocation(output);
+                Formatting.SetLocation(Path.Combine(inputPath, input_file_name + "_Minify.xml"));
                 Formatting.Minify(XMLTree.getRoot());
                 Formatting.writer.Close();
-                richTextBox1.Text = File.ReadAllText(output);
+                richTextBox1.Text = File.ReadAllText(Path.Combine(inputPath, input_file_name + "_Minify.xml"));
                 MessageBox.Show("The XML file has been minified", "INFO!");
             }
             catch (Exception x)
@@ -147,10 +138,6 @@ namespace ui_design
                 {
                     MessageBox.Show("Please! Put input file!", "Alert");
 
-                }
-                else if (output == null)
-                {
-                    MessageBox.Show("Please! Put output file!", "Alert");
                 }
                 else MessageBox.Show(x.Message, "Alert");
             }
