@@ -22,22 +22,35 @@ namespace ui_design
 
         private void browse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*"; /* chose type of files*/
-            ofd.ShowDialog();
-            textBox1.Text = File.ReadAllText(ofd.FileName);
-            file = ofd.FileName;
-        }
+            try
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*"; /* chose type of files*/
+                ofd.ShowDialog();
+                textBox1.Text = File.ReadAllText(ofd.FileName);
+                file = ofd.FileName;
+            }
+            catch(Exception x)
+            {
+                MessageBox.Show(x.Message, "Alert");
+            }
+            }
         private void Outputbtn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*"; /* chose type of files*/
-            ofd.ShowDialog();
-            //textBox1.Text = File.ReadAllText(ofd.FileName);
-            output = ofd.FileName;
-
+            try
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                ofd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*"; /* chose type of files*/
+                ofd.ShowDialog();
+                //textBox1.Text = File.ReadAllText(ofd.FileName);
+                output = ofd.FileName;
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message, "Alert");
+            }
         }
         private void NotChange(KeyPressEventArgs e) /* function to prevent writing in textbox */
         {
