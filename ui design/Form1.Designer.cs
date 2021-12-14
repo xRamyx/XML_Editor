@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.browse = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.JsonBtn = new System.Windows.Forms.Button();
@@ -37,15 +38,16 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.FormatBtn = new System.Windows.Forms.Button();
             this.DecompressBtn = new System.Windows.Forms.Button();
+            this.Outputbtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // browse
             // 
             this.browse.BackColor = System.Drawing.Color.Pink;
             this.browse.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.browse.Location = new System.Drawing.Point(431, 242);
+            this.browse.Location = new System.Drawing.Point(382, 210);
             this.browse.Name = "browse";
-            this.browse.Size = new System.Drawing.Size(148, 37);
+            this.browse.Size = new System.Drawing.Size(132, 37);
             this.browse.TabIndex = 0;
             this.browse.Text = "Put XML file";
             this.browse.UseVisualStyleBackColor = false;
@@ -54,12 +56,13 @@
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.Color.White;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.textBox1.Location = new System.Drawing.Point(32, 12);
+            this.textBox1.Location = new System.Drawing.Point(28, 12);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(393, 571);
+            this.textBox1.Size = new System.Drawing.Size(350, 571);
             this.textBox1.TabIndex = 1;
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             // 
@@ -67,9 +70,9 @@
             // 
             this.JsonBtn.BackColor = System.Drawing.Color.PaleTurquoise;
             this.JsonBtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.JsonBtn.Location = new System.Drawing.Point(997, 242);
+            this.JsonBtn.Location = new System.Drawing.Point(886, 242);
             this.JsonBtn.Name = "JsonBtn";
-            this.JsonBtn.Size = new System.Drawing.Size(148, 37);
+            this.JsonBtn.Size = new System.Drawing.Size(132, 37);
             this.JsonBtn.TabIndex = 3;
             this.JsonBtn.Text = "To Json";
             this.JsonBtn.UseVisualStyleBackColor = false;
@@ -78,9 +81,9 @@
             // 
             this.CompressBtn.BackColor = System.Drawing.Color.PaleTurquoise;
             this.CompressBtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CompressBtn.Location = new System.Drawing.Point(997, 433);
+            this.CompressBtn.Location = new System.Drawing.Point(886, 433);
             this.CompressBtn.Name = "CompressBtn";
-            this.CompressBtn.Size = new System.Drawing.Size(148, 37);
+            this.CompressBtn.Size = new System.Drawing.Size(132, 37);
             this.CompressBtn.TabIndex = 6;
             this.CompressBtn.Text = "Compress";
             this.CompressBtn.UseVisualStyleBackColor = false;
@@ -89,20 +92,21 @@
             // 
             this.MinifyBtn.BackColor = System.Drawing.Color.PaleTurquoise;
             this.MinifyBtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MinifyBtn.Location = new System.Drawing.Point(997, 335);
+            this.MinifyBtn.Location = new System.Drawing.Point(886, 335);
             this.MinifyBtn.Name = "MinifyBtn";
-            this.MinifyBtn.Size = new System.Drawing.Size(148, 37);
+            this.MinifyBtn.Size = new System.Drawing.Size(132, 37);
             this.MinifyBtn.TabIndex = 8;
             this.MinifyBtn.Text = "Minify";
             this.MinifyBtn.UseVisualStyleBackColor = false;
+            this.MinifyBtn.Click += new System.EventHandler(this.MinifyBtn_Click);
             // 
             // ConsistencyBtn
             // 
             this.ConsistencyBtn.BackColor = System.Drawing.Color.PaleTurquoise;
             this.ConsistencyBtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConsistencyBtn.Location = new System.Drawing.Point(997, 33);
+            this.ConsistencyBtn.Location = new System.Drawing.Point(886, 33);
             this.ConsistencyBtn.Name = "ConsistencyBtn";
-            this.ConsistencyBtn.Size = new System.Drawing.Size(148, 59);
+            this.ConsistencyBtn.Size = new System.Drawing.Size(132, 59);
             this.ConsistencyBtn.TabIndex = 10;
             this.ConsistencyBtn.Text = "Check Consistency";
             this.ConsistencyBtn.UseVisualStyleBackColor = false;
@@ -111,41 +115,58 @@
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.ForeColor = System.Drawing.Color.Black;
-            this.richTextBox1.Location = new System.Drawing.Point(585, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(520, 12);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(369, 571);
+            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.richTextBox1.Size = new System.Drawing.Size(328, 571);
             this.richTextBox1.TabIndex = 11;
             this.richTextBox1.Text = "";
+            this.richTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.richTextBox1_KeyPress);
             // 
             // FormatBtn
             // 
             this.FormatBtn.BackColor = System.Drawing.Color.PaleTurquoise;
             this.FormatBtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormatBtn.Location = new System.Drawing.Point(997, 152);
+            this.FormatBtn.Location = new System.Drawing.Point(886, 152);
             this.FormatBtn.Name = "FormatBtn";
-            this.FormatBtn.Size = new System.Drawing.Size(148, 37);
+            this.FormatBtn.Size = new System.Drawing.Size(132, 37);
             this.FormatBtn.TabIndex = 12;
             this.FormatBtn.Text = "Format";
             this.FormatBtn.UseVisualStyleBackColor = false;
+            this.FormatBtn.Click += new System.EventHandler(this.FormatBtn_Click);
             // 
             // DecompressBtn
             // 
             this.DecompressBtn.BackColor = System.Drawing.Color.PaleTurquoise;
             this.DecompressBtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DecompressBtn.Location = new System.Drawing.Point(997, 546);
+            this.DecompressBtn.Location = new System.Drawing.Point(886, 546);
             this.DecompressBtn.Name = "DecompressBtn";
-            this.DecompressBtn.Size = new System.Drawing.Size(148, 37);
+            this.DecompressBtn.Size = new System.Drawing.Size(132, 37);
             this.DecompressBtn.TabIndex = 13;
             this.DecompressBtn.Text = "Decompress";
             this.DecompressBtn.UseVisualStyleBackColor = false;
             // 
+            // Outputbtn
+            // 
+            this.Outputbtn.BackColor = System.Drawing.Color.Pink;
+            this.Outputbtn.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Outputbtn.Location = new System.Drawing.Point(382, 321);
+            this.Outputbtn.Name = "Outputbtn";
+            this.Outputbtn.Size = new System.Drawing.Size(132, 63);
+            this.Outputbtn.TabIndex = 14;
+            this.Outputbtn.Text = "Put output file";
+            this.Outputbtn.UseVisualStyleBackColor = false;
+            this.Outputbtn.Click += new System.EventHandler(this.Outputbtn_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ui_design.Properties.Resources.photo_1542903660_eedba2cda473;
-            this.ClientSize = new System.Drawing.Size(1185, 613);
+            this.ClientSize = new System.Drawing.Size(1052, 622);
+            this.Controls.Add(this.Outputbtn);
             this.Controls.Add(this.DecompressBtn);
             this.Controls.Add(this.FormatBtn);
             this.Controls.Add(this.richTextBox1);
@@ -155,7 +176,9 @@
             this.Controls.Add(this.JsonBtn);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.browse);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "XML project";
             this.ResumeLayout(false);
@@ -174,6 +197,7 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button FormatBtn;
         private System.Windows.Forms.Button DecompressBtn;
+        private System.Windows.Forms.Button Outputbtn;
     }
 }
 
