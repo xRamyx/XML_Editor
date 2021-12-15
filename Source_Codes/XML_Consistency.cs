@@ -11,6 +11,7 @@ namespace XML_Editor
     {
         public int first_time;
         public string file_name;
+        public List<string> tag_data = new List<string>();
 
         public XML_Consistency(string file_name, int first_time)
         {
@@ -78,10 +79,9 @@ namespace XML_Editor
         }
 
         //this method is used to read tag name and tag attributes of the tag
-        private List<string> readTag(StreamReader input)
+        private void readTag(StreamReader input)
         {
             char letter = (char)input.Read();
-            List<string> tag_data = new List<string>();
             tag_data.Add(null);
             tag_data.Add(null);
             tag_data.Add(null);
@@ -119,7 +119,6 @@ namespace XML_Editor
             }
             tag_data[0] = tag_name;
             tag_data[1] = letter.ToString(); //Self-closing '/' or '>'
-            return tag_data;
         }
 
         //this method checks if the tag has data or not (returns a boolean)
@@ -138,7 +137,6 @@ namespace XML_Editor
         public int checkConsistency(StreamReader input)
         {
             Stack<string> tags = new Stack<string>();
-            List<string> tag_data = new List<string>();
             int errors = 0;
             char characteres;
             string tag_name = null;
@@ -157,7 +155,7 @@ namespace XML_Editor
                 if (Char.IsLetter((char)input.Peek()))
                 {
                     //get the tagname
-                    tag_data = readTag(input);
+                    readTag(input);
                     tag_name = tag_data[0];
 
                     //get tag attributes
@@ -235,7 +233,8 @@ namespace XML_Editor
                     characteres = (char)input.Read();
 
                     //get the tag name of the closing tag
-                    tag_name = readTag(input)[0];
+                    readTag(input);
+                    tag_name = tag_data[0];
 
                     //compare it with the top of stack
                     if (tags.Count > 0 && tags.Peek() == tag_name)
