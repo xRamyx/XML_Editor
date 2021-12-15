@@ -103,6 +103,7 @@
             this.JsonBtn.TabIndex = 5;
             this.JsonBtn.Text = "To Json";
             this.JsonBtn.UseVisualStyleBackColor = false;
+            this.JsonBtn.Click += new System.EventHandler(this.JsonBtn_Click);
             // 
             // MinifyBtn
             // 

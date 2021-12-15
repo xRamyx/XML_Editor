@@ -129,6 +129,7 @@ namespace gui_design
                 StreamReader streamReader = new StreamReader(input_path);
                 CompressClass.Compress(input_path, output_path);
                 richTextBox1.Text = File.ReadAllText(output_path);
+                MessageBox.Show("The XML file has been compressed", "INFO!");
                 label1.Text = "The output file has been created in the same path of the input file";
 
             }
@@ -153,6 +154,8 @@ namespace gui_design
                 StreamReader streamReader = new StreamReader(input_path);
                 CompressClass.decompress(input_path, output_path);
                 richTextBox1.Text = File.ReadAllText(output_path);
+                MessageBox.Show("The XML file has been decompressed", "INFO!");
+
                 label1.Text = "The output file has been created in the same path of the input file";
             }
             catch (Exception x)
@@ -166,7 +169,38 @@ namespace gui_design
             }
 
         }
-       
+
+        private void JsonBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Tree XMLTree = XMLReader.XMLtoTree(file);
+                ConvertingToJason.SetLocation(Path.Combine(inputPath, input_file_name + "_ToJson.json"));
+                TreeNode t = new TreeNode(null, null);
+                TreeNode root = XMLTree.getRoot();
+                t.addChild(root);
+                root.setParent(t);
+                ConvertingToJason.writer1.WriteLine("{");
+                string json = ConvertingToJason.printJasonToFile(root, 1);
+                ConvertingToJason.writer1.WriteLine(json);
+                ConvertingToJason.writer1.WriteLine("}");
+                ConvertingToJason.writer1.Close();
+                richTextBox1.Text = File.ReadAllText(Path.Combine(inputPath, input_file_name + "_ToJson.json"));
+                MessageBox.Show("The XML file has been converted to Json", "INFO!");
+            }
+            catch (Exception x)
+            {
+                if (file == null)
+                {
+                    MessageBox.Show("Please put an input file!", "Alert");
+
+                }
+                else MessageBox.Show(x.Message, "Alert");
+            }
+        }
+
+        
+
         private void browse_Click(object sender, EventArgs e)
         {
             try
@@ -190,6 +224,5 @@ namespace gui_design
         {
             e.Handled = true;
         }
-
     }
 }
