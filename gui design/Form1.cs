@@ -52,19 +52,20 @@ namespace gui_design
                 }
                 if (errors > 0)
                 {
-                    MessageBox.Show("Number of erorrs is " + errors + " and they are detected and corected and highlighted", "INFO!");
+                    MessageBox.Show("Number of erorrs is " + errors + " and they are detected, corected and highlighted", "INFO!");
                 }
                 else
                 {
                     MessageBox.Show("There are no erorrs in the XML file", "INFO!");
 
                 }
+                label1.Text = "The output file has been created in the same path of the input file";
             }
             catch (Exception x)
             {
                 if (file == null)
                 {
-                    MessageBox.Show("Please! Put input file!", "Alert");
+                    MessageBox.Show("Please put an input file!", "Alert");
 
                 }
                 else MessageBox.Show(x.Message, "Alert");
@@ -81,12 +82,14 @@ namespace gui_design
                 Formatting.writer.Close();
                 richTextBox1.Text = File.ReadAllText(Path.Combine(inputPath, input_file_name + "_Format.xml"));
                 MessageBox.Show("The XML file has been formatted", "INFO!");
+                label1.Text = "The output file has been created in the same path of the input file";
+
             }
             catch (Exception x)
             {
                 if (file == null)
                 {
-                    MessageBox.Show("Please! Put input file!", "Alert");
+                    MessageBox.Show("Please put an input file!", "Alert");
 
                 }
                 else MessageBox.Show(x.Message, "Alert");
@@ -103,12 +106,14 @@ namespace gui_design
                 Formatting.writer.Close();
                 richTextBox1.Text = File.ReadAllText(Path.Combine(inputPath, input_file_name + "_Minify.xml"));
                 MessageBox.Show("The XML file has been minified", "INFO!");
+                label1.Text = "The output file has been created in the same path of the input file";
+
             }
             catch (Exception x)
             {
                 if (file == null)
                 {
-                    MessageBox.Show("Please! Put input file!", "Alert");
+                    MessageBox.Show("Please put an input file!", "Alert");
 
                 }
                 else MessageBox.Show(x.Message, "Alert");
@@ -123,13 +128,15 @@ namespace gui_design
                 string output_path = Path.Combine(inputPath, input_file_name + "_Compress.xml");
                 StreamReader streamReader = new StreamReader(input_path);
                 CompressClass.Compress(input_path, output_path);
-                richTextBox1.Text = File.ReadAllText(Path.Combine(inputPath, input_file_name + "_Compress.xml"));
+                richTextBox1.Text = File.ReadAllText(output_path);
+                label1.Text = "The output file has been created in the same path of the input file";
+
             }
             catch (Exception x)
             {
                 if (file == null)
                 {
-                    MessageBox.Show("Please! Put input file!", "Alert");
+                    MessageBox.Show("Please put an input file!", "Alert");
 
                 }
                 else MessageBox.Show(x.Message, "Alert");
@@ -142,23 +149,24 @@ namespace gui_design
             try
             {
                 string input_path = file;
-                string output_path = Path.Combine(inputPath, input_file_name + "_Compress.xml");
+                string output_path = Path.Combine(inputPath, input_file_name + "_Decompress.xml");
                 StreamReader streamReader = new StreamReader(input_path);
                 CompressClass.decompress(input_path, output_path);
-                richTextBox1.Text = File.ReadAllText(Path.Combine(inputPath, input_file_name + "_Compress.xml"));
+                richTextBox1.Text = File.ReadAllText(output_path);
+                label1.Text = "The output file has been created in the same path of the input file";
             }
             catch (Exception x)
             {
                 if (file == null)
                 {
-                    MessageBox.Show("Please! Put input file!", "Alert");
+                    MessageBox.Show("Please put an input file!", "Alert");
 
                 }
-                else MessageBox.Show(x.Message, "Alert");
+                else MessageBox.Show("Please input a compressed file!", "Alert");
             }
 
         }
-
+       
         private void browse_Click(object sender, EventArgs e)
         {
             try
@@ -174,8 +182,8 @@ namespace gui_design
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Message, "Alert");
-            }
+                
+            } 
 
         }
         private void NotChange(KeyPressEventArgs e) /* function to prevent writing in textbox */
