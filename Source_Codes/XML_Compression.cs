@@ -20,7 +20,16 @@ namespace Compression
         static int huffman_codes_index = 0;
         // these variables are used to write code bits in the output file in the WriteBit function
         // they are not static as it is used in flushing too
+        
+        static int current_bit = 0;
+        static byte bit_buffer;
+
         //output string buffer
+        static string compressed_output = "";
+        static string decompressed_output = "";
+
+        //to adjust the number of occurunces of a character to be encoded
+        public const int THRESHOLD = 0;
         /************************************CLASSES*************************************/
         public class Node
         {
@@ -110,6 +119,94 @@ namespace Compression
             int[] code_arr = new int[19]; //just a dummy array for recursion in get code function, 19 is the maximum huffman code size,
             Node root = createHuffmanTree(data, freq, size);
             getCodes(root, code_arr, 0);
+        }
+        private static void WriteBit(int bit)
+        {
+            //concatenates every 7 bits in a buffer then saves the whole output in a global string compressed_output
+            //7 bits not 8 as if the output character is 8 bits it will be stored in 2 bytes (UTF16) by default
+            //at de compression , the MSB will not be considered
+            bit_buffer <<= 1;
+            if (bit == 1)
+                bit_buffer |= 0x1;
+
+            current_bit++;
+            if (current_bit == 7)
+            {
+                compressed_output += (char)(byte)bit_buffer;
+                current_bit = 0;
+                bit_buffer = 0;
+            }
+        }
+        //Flush is used to complete the last byte in file if it wasnt already complete 
+        private static void Flush()
+        {
+            while (current_bit != 0)
+                WriteBit(0);
+        }
+        public static void Compress(string input_path, string output_path)
+        {
+            int file_size = 0;
+            char[] file_string = new char[20000];//max 20kb
+            StreamReader streamReader = new StreamReader(input_path);
+            int idx = 0;
+            while (streamReader.Peek() != -1)
+            {
+                file_size++;
+                file_string[idx++] = (char)streamReader.Read();
+            }
+
+            int[] char_map = new int[128];
+            for (int i = 0; i < file_size; i++)
+            {
+                char_map[file_string[i]]++;
+            }
+
+            //We must add characters and the characters frequencies (key) at the top of the compressed output file for decompression 
+            //the key ended by three dollar signs
+            char[] file_characters = new char[128];
+            char[] file_characters_freq = new char[128];
+            int file_index = 0;
+
+            for (int i = 0; i < 128; i++)
+            {
+                if (char_map[i] > THRESHOLD)
+                {   //copy characters in output
+                    file_characters[file_index] = (char)(byte)i;
+                    compressed_output += (char)(byte)i;
+                    file_characters_freq[file_index++] = (char)char_map[i];
+                }
+            }
+            compressed_output += "$$";//to separate frequency and characters
+
+            //write the frequencies
+            for (int i = 0; i < file_index; i++)
+            {
+                compressed_output += (char)file_characters_freq[i];
+            }
+            compressed_output += "$$$";//to separate the compressed file from key
+
+            GetHuffmanCodes(file_characters, file_characters_freq, file_index);
+
+            int[] huffman_results_map = new int[128];
+            for (int i = 0; i < huffman_codes_index; i++)
+            {
+                if (huffman_codes_arr[i] > 1)// not code but character
+                {
+                    huffman_results_map[huffman_codes_arr[i]] = i + 1; // huffmanarr[i] contains character ascii , i+1 is the index of the char code in the huffman_arr  
+                }
+            }
+            for (int i = 0; i < file_string.Length; i++)
+            {
+
+                int j = huffman_results_map[file_string[i]]; // j contains index of first bit in the characters code
+                while (huffman_codes_arr[j] <= 1 && j < huffman_codes_index)//write bits of code of the character until u find next character in huffman_arr
+                {
+                    WriteBit(huffman_codes_arr[j++]);
+                }
+            }
+
+
+            File.WriteAllText(output_path, compressed_output);
         }
         
     }
