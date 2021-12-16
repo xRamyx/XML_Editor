@@ -69,48 +69,79 @@ namespace XML_TO_JSON
 
     class XMLReader
     {
+        // Function to return an XML file as a tree
         public static Tree XMLtoTree(string location)
         {
+            // read XML file as a string in contents
             string contents;
             Tree XMLTree = new Tree();
             using (StreamReader streamReader = new StreamReader(location))
             {
                 contents = streamReader.ReadToEnd();
             }
+            // Loop on every character in the file
             int i;
             for (i = 0; i < contents.Length; i++)
             {
+                // Search for opening or closing tag
                 if (contents[i] == '<')
                 {
                     i++;
+                    // If closing tag then decrement heriarchy in tree
                     if (contents[i] == '/')
                     {
                         XMLTree.move_parent_up();
                     }
+                    // Ignore XML version line
+                    else if (contents[i] == '?') { }
+                    // Ignore XML comments
+                    else if (contents[i] == '!') { }
+                    // Then this is opening tag
                     else
                     {
+                        // Take the tag name in a string until closing bracket
                         string openingTag = "";
-                        while (contents[i] != '>')
+                        while (contents[i] != '>' && contents[i] != ' ')
                         {
                             openingTag += contents[i];
                             i++;
                         }
+                        if (contents[i] == ' ')
+                        {
+                            while (contents[i] != '>') i++;
+                        }
                         i++;
+                        // Ignore spaces and new lines
                         while (contents[i] == ' ' || contents[i] == '\n' || contents[i] == '\r') i++;
                         string tagValue = "";
+                        // If there is no tag value then skip
                         if (contents[i] == '<')
                         {
                             i--;
                         }
+                        // In case there is tag value
                         else
                         {
-                            while (contents[i] != '<' && contents[i] != '\n')
+                            // Take the tag value in a string until there is a new line or an opening tag
+                            while (true)
                             {
-                                tagValue += contents[i];
-                                i++;
+                                if (contents[i] == '\r' || contents[i] == '\n' || contents[i] == ' ')
+                                {
+                                    i++;
+                                }
+                                else if (contents[i] == '<')
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    tagValue += contents[i];
+                                    i++;
+                                }
                             }
                             i--;
                         }
+                        // Insert the node in the tree
                         XMLTree.insert(openingTag, tagValue);
                     }
                 }
@@ -118,7 +149,6 @@ namespace XML_TO_JSON
             return XMLTree;
         }
     }
-
     class ConvertingToJason
     {
         public static StreamWriter writer1;
