@@ -19,8 +19,6 @@ namespace Compression
         static int[] huffman_codes_arr = new int[2560];
         static int huffman_codes_index = 0;
         // these variables are used to write code bits in the output file in the WriteBit function
-        // they are not static as it is used in flushing too
-        
         static int current_bit = 0;
         static byte bit_buffer;
 
@@ -209,6 +207,92 @@ namespace Compression
             StreamWriter x = new StreamWriter(output_path,false);
             x.Write(compressed_output);
             x.Close();
+        }
+         private static void decode(Node root, ref int idx, string str)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            // found a leaf node
+            if (root.left == null && root.right == null)
+            {
+                decompressed_output += root.ch;
+                return;
+            }
+
+            idx++;
+
+            if (str[idx] == '0')
+                decode(root.left, ref idx, str);
+            else if (str[idx] == '1')
+                decode(root.right, ref idx, str);
+        }
+
+        private static int[] get_bits(int n)
+        {
+            int[] bits = new int[7];
+            for (int i = 0; n > 0; i++)
+            {
+                bits[i] = n % 2;
+                n = n / 2;
+            }
+            return bits;
+        }
+
+        public static void decompress(string input_path, string output_path)
+        {
+            string text_in_bits = "";//will contain all input text in bits
+
+            string text = File.ReadAllText(input_path, Encoding.UTF8);
+
+            char[] freq_key = new char[text.Length];//max possible value
+            char[] char_key = new char[text.Length];
+            int text_index = 0;
+            while (text[text_index] != '$' || text[text_index + 1] != '$')
+            {
+                char_key[text_index] = text[text_index];
+                text_index++;
+            }
+            int size = text_index;
+            text_index += 2;//skip 2 dollar signs
+            int idx = 0;
+            int real_file_size = 0;
+            while (text[text_index] != '$' || text[text_index + 1] != '$' || text[text_index + 2] != '$')//check for 3 dollar signs delimiter
+            {
+                real_file_size += text[text_index];
+                freq_key[idx++] = text[text_index++];
+            }
+            Node root;
+            root = createHuffmanTree(char_key, freq_key, size);
+
+            //here starts the real file content
+            text_index += 3;
+
+            int[] _byte = new int[7];
+
+            for (int i = text_index; i < text.Length; i++)
+            {
+                _byte = get_bits(text[i]);
+                for (int j = 6; j >= 0; j--)//remove MSB
+                {
+                    if (_byte[j] == 1)
+                        text_in_bits += '1';
+                    else
+                        text_in_bits += '0';
+                }
+            }
+            int dum = -1;
+
+            for (int i = 0; i < real_file_size - 1; i++)
+            {
+                decode(root, ref dum, text_in_bits);
+            }
+            StreamWriter x = new StreamWriter(output_path,false);
+            x.Write(decompressed_output);
+            x.Close();
+
         }
         
     }
