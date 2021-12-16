@@ -143,6 +143,7 @@ namespace Compression
         }
         public static void Compress(string input_path, string output_path)
         {
+            compressed_output = "";
             int file_size = 0;
             char[] file_string = new char[20000];//max 20kb
             StreamReader streamReader = new StreamReader(input_path);
@@ -243,6 +244,7 @@ namespace Compression
 
         public static void decompress(string input_path, string output_path)
         {
+            decompressed_output="";
             string text_in_bits = "";//will contain all input text in bits
 
             string text = File.ReadAllText(input_path, Encoding.UTF8);
