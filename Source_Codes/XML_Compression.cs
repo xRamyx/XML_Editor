@@ -206,7 +206,9 @@ namespace Compression
             }
 
 
-            File.WriteAllText(output_path, compressed_output);
+            StreamWriter x = new StreamWriter(output_path,false);
+            x.Write(compressed_output);
+            x.Close();
         }
         
     }
