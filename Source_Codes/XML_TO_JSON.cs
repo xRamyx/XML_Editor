@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml;
 
 namespace XML_TO_JSON
 {
@@ -123,9 +124,10 @@ namespace XML_TO_JSON
                         else
                         {
                             // Take the tag value in a string until there is a new line or an opening tag
+                            while (contents[i] == ' ' || contents[i] == '\n' || contents[i] == '\r') i++;
                             while (true)
                             {
-                                if (contents[i] == '\r' || contents[i] == '\n' || contents[i] == ' ')
+                                if(contents[i] == '\n' || contents[i] == '\r' || contents[i] == (char)13)
                                 {
                                     i++;
                                 }
@@ -189,10 +191,9 @@ namespace XML_TO_JSON
                 if(!ChildrenAreSame(p,level))
                 {
                     //Case 1
-                    
                     result += taps(level) + "\"" + node.getTagName() + "\": ";
-                    Boolean f= int.TryParse(node.getTagValue(),out int n);
-                    string data = f?node.getTagValue():'"'+node.getTagValue().Trim(trimmed)+'"';
+                    Boolean f= double.TryParse(node.getTagValue(),out double n);
+                    string data = f?((double)n).ToString():'"'+node.getTagValue().Trim(trimmed)+'"';
                     result += data;
                 }
                 else
@@ -202,12 +203,11 @@ namespace XML_TO_JSON
                     result += taps(level) + "\"" + node.getTagName() + "\": [\n";
                     for (int i = 0; i < p.getChildren().Count(); i++)
                     {
-                        value = node.getTagValue().Trim(trimmed);
+                        value = p.getChildren()[i].getTagValue().Trim(trimmed);
                         string comma = i<p.getChildren().Count()-1?",":"";
-                        Boolean f= int.TryParse(value,out int n);
-                        string data = f?value:string.Format("\"{0}\"",value);
+                        Boolean f= double.TryParse(value,out double n);
+                        string data = f?((double)n).ToString():string.Format("\"{0}\"",value);
                         data +=comma;
-                        //writer1.WriteLine(data);
                         result += taps(level+1) + data + "\n";
                     }
                     result += taps(level) + "]";
@@ -218,9 +218,23 @@ namespace XML_TO_JSON
                 if(!ChildrenAreSame(p,level))
                 {
                     //Case 3
+                    string comma;
                     result += taps(level) + "\"" + node.getTagName() + "\": {\n";
-                    result += printJasonToFile(node.getChildren()[0],level+1);
-                    result += "\n" + taps(level) + "}";
+                    List<TreeNode> children = node.getChildren();
+                    if(ChildrenAreSame(node,level))
+                    {
+                        result += printJasonToFile(children[0],level+1) + "\n";
+                    }
+                    else
+                    {
+                        for (int i = 0; i < children.Count(); i++)
+                        {
+                             result += printJasonToFile(children[i],level+1);
+                             comma = i<children.Count()-1?",\n":"\n";
+                             result += comma;
+                        }
+                    }
+                    result += taps(level) + "}";
                 }
                 else
                 {

@@ -56,33 +56,37 @@ namespace XML_Formatting
                         // In case there is tag value
                         else
                         {
-                            // Take the tag value in a string until there is a new line or an opening tag
+                            // Start taking the tag value in a string until there is an opening tag
                             while (contents[i] != '<')
                             {
-                                if(contents[i] == '\r' || contents[i] == '\n')
+                                // skip new line characters
+                                if (contents[i] == '\r' || contents[i] == '\n')
                                 {
                                     i++;
                                 }
-                                else if(contents[i] == ' ')
+                                else if (contents[i] == ' ')
                                 {
                                     tagValue += contents[i];
                                     i++;
-                                    if(contents[i] == '\r' || contents[i] == '\n')
+                                    // If there is a new line after a space then skip all the spaces (indentation) after it 
+                                    if (contents[i] == '\r' || contents[i] == '\n')
                                     {
                                         i++;
-                                        if(contents[i] == '\n') { i++; }
-                                        while(contents[i] == ' ')
+                                        if (contents[i] == '\n') { i++; }
+                                        while (contents[i] == ' ')
                                         {
                                             i++;
                                         }
                                     }
-                                    else if(contents[i] == ' ')
+                                    // If there is a space after a space then ignore the upcoming spaces
+                                    else if (contents[i] == ' ')
                                     {
-                                        while(contents[i] == ' ') { i++; }
+                                        while (contents[i] == ' ') { i++; }
                                     }
                                 }
                                 else
                                 {
+                                    // Take all the characters otherwise
                                     tagValue += contents[i];
                                     i++;
                                 }
@@ -150,9 +154,10 @@ namespace XML_Formatting
                         // In case there is tag value
                         else
                         {
-                            // Take the tag value in a string until there is a new line or an opening tag
+                            // Start taking the tag value in a string until there is an opening tag
                             while (contents[i] != '<')
                             {
+                                // skip new line characters
                                 if (contents[i] == '\r' || contents[i] == '\n')
                                 {
                                     i++;
@@ -161,6 +166,7 @@ namespace XML_Formatting
                                 {
                                     tagValue += contents[i];
                                     i++;
+                                    // If there is a new line after a space then skip all the spaces (indentation) after it 
                                     if (contents[i] == '\r' || contents[i] == '\n')
                                     {
                                         i++;
@@ -170,6 +176,7 @@ namespace XML_Formatting
                                             i++;
                                         }
                                     }
+                                    // If there is a space after a space then ignore the upcoming spaces
                                     else if (contents[i] == ' ')
                                     {
                                         while (contents[i] == ' ') { i++; }
@@ -177,6 +184,7 @@ namespace XML_Formatting
                                 }
                                 else
                                 {
+                                    // Take all the characters otherwise
                                     tagValue += contents[i];
                                     i++;
                                 }
