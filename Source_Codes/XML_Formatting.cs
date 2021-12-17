@@ -56,16 +56,4 @@ namespace XML_Formatting
             writer.WriteLine(">");
         }
     }
-
-    class Program
-    { 
-        static void Main(string[] args)
-        {
-            Tree XMLTree = XMLReader.XMLtoTree("C:\\Users\\Rany\\Desktop\\data-sample.xml");
-            XML_Formatting.SetLocation("C:\\Users\\Rany\\Desktop\\Formatting.xml");
-            XML_Formatting.Prettify(XMLTree.getRoot(), 0);
-            XML_Minifying.SetLocation("C:\\Users\\Rany\\Desktop\\Minifying.xml");
-            XML_Minifying.Minify(XMLTree.getRoot());
-        }
-    }
 }
