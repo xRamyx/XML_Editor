@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using PriorityQueue;
 
 
 namespace Compression
@@ -19,17 +20,19 @@ namespace Compression
         static int[] huffman_codes_arr = new int[2560];
         static int huffman_codes_index = 0;
         // these variables are used to write code bits in the output file in the WriteBit function
-        static int current_bit = 0;
-        static byte bit_buffer;
-
+        // they are not static as it is used in flushing too
         //output string buffer
         static string compressed_output = "";
-        static string decompressed_output = "";
 
+        static string decompressed_output = "";
+        static int current_bit = 0;
+        static byte bit_buffer;
         //to adjust the number of occurunces of a character to be encoded
         public const int THRESHOLD = 0;
+
+
         /************************************CLASSES*************************************/
-        public class Node
+        public class Node : IComparable
         {
 
             public char ch;
@@ -49,6 +52,17 @@ namespace Compression
                 else
                     return false;
             }
+            #region IComparable Implementation
+            public int CompareTo(object obj){
+                    Node node = (Node)obj;
+                    if(this.frequency<node.frequency)
+                    return -1;
+                    else if (this.frequency>node.frequency)
+                    return 1;
+                    else 
+                    return 0;
+            }
+            #endregion
         }
 
         /**********************************************FUNCTIONS****************************/
@@ -56,13 +70,12 @@ namespace Compression
         //this function is passed the root of the huffman tree and any array to hold the result of recursion (code of a certain character)
         private static void getCodes(Node root, int[] arr, int top)
         {
+            // Assign 0 to left edge and recur
             if (root.left != null)
             {
-
                 arr[top] = 0;
                 getCodes(root.left, arr, top + 1);
             }
-
             // Assign 1 to right edge and recur
             if (root.right != null)
             {
@@ -88,28 +101,26 @@ namespace Compression
         private static Node createHuffmanTree(char[] data, char[] freq, int size)
         {
             Node left, right, sum;
-            var tree = new PriorityQueue<Node, int>(); // Min Heap priority queue
+            PriorityQueue<Node> tree = new PriorityQueue<Node>(); // Min Heap priority queue
 
             // fill the queue with nodes of characters and their frequencies
             for (int i = 0; i < size; i++)
             {
-                tree.Enqueue(new Node(data[i], freq[i]), freq[i]);//frequency determines priority
+                tree.Enqueue(new Node(data[i], freq[i]));//frequency determines priority
             }
             while (tree.Count != 1)
             { // at end of creation of tree,only 1 element will be left which is the root
-                left = tree.Peek();
-                tree.Dequeue();
+                left = tree.Dequeue();
 
-                right = tree.Peek();
-                tree.Dequeue();
+                right = tree.Dequeue();
                 //default character of a non-leaf node is $
                 sum = new Node('$', left.frequency + right.frequency);
                 sum.left = left;
                 sum.right = right;
 
-                tree.Enqueue(sum, sum.frequency);
+                tree.Enqueue(sum);
             }
-            return tree.Peek(); // return root of tree
+            return tree.Dequeue(); // return root of tree
         }
 
         private static void GetHuffmanCodes(char[] data, char[] freq, int size)
@@ -142,8 +153,7 @@ namespace Compression
                 WriteBit(0);
         }
         public static void Compress(string input_path, string output_path)
-        {
-            compressed_output = "";
+        {   compressed_output = "";
             int file_size = 0;
             char[] file_string = new char[20000];//max 20kb
             StreamReader streamReader = new StreamReader(input_path);
@@ -203,13 +213,14 @@ namespace Compression
                     WriteBit(huffman_codes_arr[j++]);
                 }
             }
-
+            Flush();
 
             StreamWriter x = new StreamWriter(output_path,false);
             x.Write(compressed_output);
             x.Close();
         }
-         private static void decode(Node root, ref int idx, string str)
+
+        private static void decode(Node root, ref int idx, string str)
         {
             if (root == null)
             {
@@ -287,7 +298,7 @@ namespace Compression
             }
             int dum = -1;
 
-            for (int i = 0; i < real_file_size - 1; i++)
+            for (int i = 0; i < real_file_size ; i++)
             {
                 decode(root, ref dum, text_in_bits);
             }
@@ -296,6 +307,9 @@ namespace Compression
             x.Close();
 
         }
-        
+        static void Main(string [] args ){
+            Compress("data-sample.xml","output.xml");
+            decompress("output.xml","decooutput.xml");
+        }
     }
 }
