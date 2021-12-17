@@ -307,9 +307,5 @@ namespace Compression
             x.Close();
 
         }
-        static void Main(string [] args ){
-            Compress("data-sample.xml","output.xml");
-            decompress("output.xml","decooutput.xml");
-        }
     }
 }
