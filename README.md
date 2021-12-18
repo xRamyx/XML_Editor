@@ -1,8 +1,8 @@
 # XML_Editor
 
 <body align="center">
+<img src="https://user-images.githubusercontent.com/85303564/146642628-b5815b5b-fc85-4190-9601-994d245f5146.png" alt="drawing" width="200" heigth="200" />
 
-![xml](https://user-images.githubusercontent.com/85303564/146642628-b5815b5b-fc85-4190-9601-994d245f5146.png)
 ![GitHub language used](https://img.shields.io/badge/Language-C%23-brightgreen)
 ![GitHub contributors](https://img.shields.io/badge/Contributors-5-brightgreen)
 
