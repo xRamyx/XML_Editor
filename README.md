@@ -1,7 +1,13 @@
 # XML_Editor
 
+<body align="center">
+
+![xml](https://user-images.githubusercontent.com/85303564/146642628-b5815b5b-fc85-4190-9601-994d245f5146.png)
 ![GitHub language used](https://img.shields.io/badge/Language-C%23-brightgreen)
 ![GitHub contributors](https://img.shields.io/badge/Contributors-5-brightgreen)
+
+XML Editor application that is used for doing multiple operations on XML files.
+</body>
 
 ## Background
 
