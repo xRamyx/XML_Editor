@@ -11,3 +11,11 @@ The user can browse to the location of the XML file he/she wants to make operati
 *	Minifying the XML file by removing spaces and newlines.
 *	Compressing the data in the XML file to reduce its size.
 *	Decompressing the data back into XML.
+
+## Features of the application
+* Detecting, correcting and highlighting errors in XML files.
+* Formatting XML files.
+* Minifying XML files.
+* Converting XML file to JSON format.
+* Compressing XML/JSON files.
+* Decompressing XML/JSON files.
