@@ -26,7 +26,15 @@ namespace XML_Formatting
                 Minify(subtree);
             }
 
-            writer.Write("</" + node.getTagName() + ">");
+            // Print closing tag without attribute
+            string name = node.getTagName();
+            writer.Write("</");
+            foreach (char c in name)
+            {
+                if (c == ' ') { break; }
+                writer.Write(c);
+            }
+            writer.Write(">");
         }
     }
 }
