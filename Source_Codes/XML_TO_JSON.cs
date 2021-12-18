@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace XML_TO_JSON
 {
-    class ConvertingToJason
+    class ConvertingToJson
     {
         public static StreamWriter writer1;
         public static void SetLocation(string location)
@@ -21,11 +21,6 @@ namespace XML_TO_JSON
                 return true;
             else
                 return false;
-        }
-        public static int noOfChildren(TreeNode node, int level)
-        {
-            List<TreeNode> number = node.getChildren();
-            return number.Count;
         }
 
         public static string taps(int level)
