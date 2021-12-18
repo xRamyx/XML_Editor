@@ -152,7 +152,7 @@ namespace ui_design
         {
             try
             {
-                Tree XMLTree = XMLReader_forJson.XMLtoTree(file);
+                Tree XMLTree = XMLReader.XMLtoTreeForJSON(file);
                 ConvertingToJason.SetLocation(Path.Combine(inputPath, input_file_name + "_ToJson.json"));
                 TreeNode t = new TreeNode(null, null);
                 TreeNode root = XMLTree.getRoot();
