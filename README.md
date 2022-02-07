@@ -19,6 +19,7 @@ The user can browse to the location of the XML file he/she wants to make operati
 *	Minifying the XML file by removing spaces and newlines.
 *	Compressing the data in the XML file to reduce its size.
 *	Decompressing the data back into XML.
+*	Visualizing the relation between users into a graph structure.
 Then a new file is saved in the same path of the input file.
 
 ## Features of the application
@@ -28,3 +29,4 @@ Then a new file is saved in the same path of the input file.
 * Converting XML file to JSON format.
 * Compressing XML/JSON files.
 * Decompressing XML/JSON files.
+* Visualizing the relation between different users.
