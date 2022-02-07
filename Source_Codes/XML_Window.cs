@@ -13,6 +13,11 @@ namespace ui_design
 {
     public partial class XML_Window : Form
     {
+        System.Windows.Forms.Form form = new System.Windows.Forms.Form();
+        //create a viewer object
+        Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+        //create a graph object
+        Microsoft.Msagl.Drawing.Graph graph2 = new Microsoft.Msagl.Drawing.Graph("graph");
         string file,inputPath, input_file_name;
         public XML_Window()
         {
@@ -167,7 +172,7 @@ namespace ui_design
                 MessageBox.Show("The XML file has been converted to json", "INFO!");
                 label1.Text = "The output file has been created in the same path of the input file";
             }
-            catch(Exception x)
+            catch (Exception x)
             {
                 if (file == null)
                 {
@@ -176,7 +181,36 @@ namespace ui_design
                 else MessageBox.Show(x.Message, "Alert");
             }
 
+        }
+
+        private void VisualizeBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string input_path = file;
+                StreamReader streamReader = new StreamReader(input_path);
+                XML_Visualize A = new XML_Visualize();
+                graph2 = A.visualize(streamReader);
+                //bind the graph to the viewer 
+                viewer.Graph = graph2;
+                //associate the viewer with the form 
+                form.SuspendLayout();
+                viewer.Dock = System.Windows.Forms.DockStyle.Fill;
+                form.Controls.Add(viewer);
+                form.ResumeLayout();
+                //show the form 
+                form.ShowDialog();
             }
+            catch (Exception x)
+            {
+                if (file == null)
+                {
+                    MessageBox.Show("Please put an input file!", "Alert");
+                }
+                else MessageBox.Show(x.Message, "Alert");
+            }
+
+        }
 
         private void FormatBtn_Click(object sender, EventArgs e)
         {
