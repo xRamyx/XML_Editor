@@ -258,6 +258,15 @@ namespace XML_Editor
                             tags.Pop();
                         }
                     }
+
+                    //if the stack is empty and a closed tag appears
+                    else if(tags.Count == 0)
+                    {
+                        errors++;
+                        output("<" + tag_name + ">" + " <<< ERROR DETECTED & CORRECTED HERE!", true);
+                        output("</" + tag_name + ">", false);
+                        previous_closed = true;
+                    }
                 }
 
                 //if it is a comment or preprocessor tag >>> skip
