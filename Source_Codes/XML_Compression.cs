@@ -155,7 +155,7 @@ namespace Compression
         public static void Compress(string input_path, string output_path)
         {   compressed_output = "";
             int file_size = 0;
-            char[] file_string = new char[1000000];//max 20kb
+            char[] file_string = new char[1000000];//max 1 MB
             StreamReader streamReader = new StreamReader(input_path);
             int idx = 0;
             while (streamReader.Peek() != -1)
